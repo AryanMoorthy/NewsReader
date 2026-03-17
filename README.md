@@ -1,16 +1,88 @@
-# React + Vite
+# 🧩 News Headlines Reader
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React-based news application that fetches and displays the latest headlines using a news API.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+- 📰 Fetch latest news headlines
+- 📂 Filter news by category (Technology, Sports, Business, etc.)
+- 🔍 Search articles by keyword
+- 📖 Expand/collapse article descriptions
+- ✅ Mark articles as read (with strike-through)
+- 📊 Read vs Unread counter
+- 🌗 Dark mode toggle (optional)
+- 🔄 Refresh news button
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React (Vite)
+- JavaScript (ES6+)
+- CSS
+- News API
+
+---
+
+## 📦 Installation & Setup
+
+Clone the repository:
+
+```bash
+git clone https://github.com/AryanMoorthy/NewsReader.git
+cd NewsReader
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the app locally:
+
+```bash
+npm run dev
+```
+
+---
+
+## 🌍 Live Demo
+
+👉 (Add your deployed link here after hosting)
+
+---
+
+## 📌 Project Structure
+
+```
+src/
+ ├── components/
+ ├── App.jsx
+ ├── main.jsx
+ ├── styles/
+```
+
+---
+
+## ⚠️ Notes
+
+- API key is stored securely using environment variables
+- Some APIs may have CORS restrictions on frontend requests
+
+---
+
+## 🙌 Future Improvements
+
+- Bookmark articles
+- Pagination / infinite scroll
+- Better UI animations
+- Backend integration for secure API handling
+
+---
+
+## 👨‍💻 Author
+
+Aryan Moorthy
