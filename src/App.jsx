@@ -7,7 +7,16 @@ import { formatDistanceToNow } from 'date-fns';
 import './index.css';
 
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY || 'YOUR_KEY';
-const CATEGORIES = ['All', 'Business', 'Technology', 'Sports', 'Health', 'Entertainment'];
+const CATEGORIES = ['All', 'World', 'Nation', 'Business', 'Technology', 'Science', 'Sports', 'Health', 'Entertainment'];
+const COUNTRIES = [
+  { code: 'us', name: 'USA' },
+  { code: 'in', name: 'India' },
+  { code: 'gb', name: 'UK' },
+  { code: 'au', name: 'Australia' },
+  { code: 'ca', name: 'Canada' },
+  { code: 'de', name: 'Germany' },
+  { code: 'fr', name: 'France' }
+];
 
 // Dummy data for fallback if API is not working initially
 const DUMMY_DATA = [
@@ -57,6 +66,7 @@ function App() {
   const [category, setCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('latest');
+  const [country, setCountry] = useState('in'); // Default to India as per user's preference
   
   // Persisted state using lazy initialization
   const [readArticles, setReadArticles] = useState(() => {
@@ -99,15 +109,15 @@ function App() {
 
   useEffect(() => {
     fetchNews();
-  }, [category]);
+  }, [category, country]);
 
   const fetchNews = async () => {
     setLoading(true);
     setError(null);
     try {
-      // API call to real NewsAPI endpoint
+      // API call to GNews API endpoint
       const catParam = category === 'All' ? 'general' : category.toLowerCase();
-      const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${catParam}&apiKey=${API_KEY}`);
+      const response = await fetch(`https://gnews.io/api/v4/top-headlines?category=${catParam}&lang=en&country=${country}&max=10&apikey=${API_KEY}`);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -115,22 +125,23 @@ function App() {
       
       const data = await response.json();
       
-      if (data.status === 'ok') {
-        // Filter out articles with missing essential data or '[Removed]'
+      if (data.articles) {
+        // Filter out articles with missing essential data
         const validArticles = data.articles.filter(
-          a => a.title && a.title !== '[Removed]' && a.url
+          a => a.title && a.url
         );
         
-        // Add artificial ID and breaking flags 
+        // Add artificial ID and breaking flags, and map 'image' to 'urlToImage' for compatibility
         const mappedArticles = validArticles.map((article, index) => ({
           ...article,
+          urlToImage: article.image, // GNews uses 'image'
           id: `article-${index}-${Date.now()}`,
           isBreaking: index === 0 && Math.random() > 0.7 // Randomly assign breaking to top article
         }));
         
         setArticles(mappedArticles);
       } else {
-        throw new Error(data.message || 'Failed to fetch news');
+        throw new Error(data.errors?.[0] || 'Failed to fetch news');
       }
     } catch (err) {
       console.warn('API Fetch failed, using dummy data fallback.', err);
@@ -252,6 +263,28 @@ function App() {
           <button className="icon-btn" onClick={toggleTheme} title="Toggle Dark Mode">
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
+
+          <select 
+            className="country-select"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            title="Change Country"
+            style={{
+              padding: '0.4rem 0.6rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'var(--card-bg)',
+              color: 'var(--text-main)',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              outline: 'none',
+              marginLeft: '0.5rem'
+            }}
+          >
+            {COUNTRIES.map(c => (
+              <option key={c.code} value={c.code}>{c.name}</option>
+            ))}
+          </select>
         </div>
       </header>
 
@@ -346,10 +379,10 @@ function App() {
         ) : (
           <div className="news-grid">
             {filteredArticles.map((article) => {
-              const uId = article.title; // Using title as unique ID fallback
-              const isRead = readArticles.includes(uId);
-              const isBookmarked = bookmarkedArticles.includes(uId);
-              const isExpanded = expandedArticles.includes(uId);
+              const uId = article.id; // Using the uniquely generated ID
+              const isRead = readArticles.includes(article.title);
+              const isBookmarked = bookmarkedArticles.includes(article.title);
+              const isExpanded = expandedArticles.includes(article.title);
               
               return (
                 <div key={uId} className={`article-card ${isRead ? 'read' : ''}`}>
