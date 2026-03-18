@@ -67,6 +67,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('latest');
   const [country, setCountry] = useState('in'); // Default to India as per user's preference
+  const [newsCache, setNewsCache] = useState({});
   
   // Persisted state using lazy initialization
   const [readArticles, setReadArticles] = useState(() => {
@@ -111,7 +112,18 @@ function App() {
     fetchNews();
   }, [category, country]);
 
-  const fetchNews = async () => {
+  const fetchNews = async (forceRefresh = false) => {
+    const cacheKey = `${country}-${category}`;
+    const cachedData = newsCache[cacheKey];
+    const cacheTTL = 10 * 60 * 1000; // 10 minutes
+
+    if (!forceRefresh && cachedData && (Date.now() - cachedData.timestamp < cacheTTL)) {
+      console.log(`Using cached data for ${cacheKey}`);
+      setArticles(cachedData.data);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -140,6 +152,14 @@ function App() {
         }));
         
         setArticles(mappedArticles);
+        // Update cache
+        setNewsCache(prev => ({
+          ...prev,
+          [cacheKey]: {
+            data: mappedArticles,
+            timestamp: Date.now()
+          }
+        }));
       } else {
         throw new Error(data.errors?.[0] || 'Failed to fetch news');
       }
@@ -148,6 +168,7 @@ function App() {
       // Fallback to dummy data
       const fakeApiResponse = DUMMY_DATA.map((article, index) => ({
         ...article,
+        urlToImage: article.urlToImage, // DUMMY_DATA uses urlToImage
         id: `article-${index}-${Date.now()}`,
         isBreaking: index === 0 || index === 2
       }));
@@ -313,7 +334,7 @@ function App() {
       </div>
 
       <div className="filters-row" style={{ marginTop: '-1rem' }}>
-        <button className="btn btn-outline" onClick={fetchNews} disabled={loading}>
+        <button className="btn btn-outline" onClick={() => fetchNews(true)} disabled={loading}>
           <RefreshCw size={16} className={loading ? 'skeleton' : ''} /> Refresh News
         </button>
         
