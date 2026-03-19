@@ -5,36 +5,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /**
- * 1. DESIGN SYSTEM (CSS VARIABLES)
- * Defining tokens for colors and themes allows for easy global updates 
- * and seamless theme switching.
+ * 1. PREMIUM DESIGN SYSTEM (CSS VARIABLES)
+ * Moving from generic colors to a curated HSL-based palette for a 
+ * state-of-the-art look.
  */
 :root {
-  --primary: #3b82f6;          /* Bright Blue for buttons and highlights */
-  --primary-hover: #2563eb;    /* Slightly darker blue for hover states */
-  --bg-color: #f3f4f6;         /* Light grey background for the app */
-  --card-bg: #ffffff;          /* Pure white for article cards */
-  --text-main: #111827;        /* Almost black for high readability */
-  --text-muted: #6b7280;       /* Medium grey for secondary info */
-  --border-color: #e5e7eb;     /* Soft grey for dividers and borders */
-  --danger: #ef4444;           /* Red for alert/breaking news */
-  --success: #10b981;          /* Green for 'Read' status indicator */
+  /* Vibrant & modern brand colors */
+  --primary: hsl(221, 83%, 53%);       /* Sophisticated deep blue */
+  --primary-glow: hsla(221, 83%, 53%, 0.3);
+  --bg-color: hsl(210, 40%, 98%);     /* Off-white marble */
+  --card-bg: hsl(0, 0%, 100%);
+  --text-main: hsl(224, 71%, 4%);
+  --text-muted: hsl(215, 16%, 47%);
+  --border-color: hsl(214, 32%, 91%);
+  
+  /* Action colors */
+  --danger: hsl(0, 84%, 60%);
+  --success: hsl(142, 71%, 45%);
+  --warning: hsl(38, 92%, 50%);
+
+  /* Premium effects */
+  --glass-bg: hsla(0, 0%, 100%, 0.8);
+  --glass-border: hsla(0, 0%, 100%, 0.3);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-premium: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /**
- * 2. DARK MODE OVERRIDES
- * When the .dark-mode class is added to the <body>, these variables 
- * override the default light theme tokens.
+ * 2. DARK MODE (NEON GLOW)
+ * A sleek, high-contrast dark theme with glowing accents.
  */
 .dark-mode {
-  --primary: #60a5fa;
-  --primary-hover: #3b82f6;
-  --bg-color: #111827;         /* Deep dark navy background */
-  --card-bg: #1f2937;          /* Slightly lighter navy for cards */
-  --text-main: #f9fafb;        /* Off-white for readability in the dark */
-  --text-muted: #9ca3af;
-  --border-color: #374151;     /* Subdued border color for dark mode */
+  --primary: hsl(217, 91%, 60%);
+  --primary-glow: hsla(217, 91%, 60%, 0.2);
+  --bg-color: hsl(222, 47%, 11%);
+  --card-bg: hsl(223, 47%, 15%);
+  --text-main: hsl(210, 40%, 98%);
+  --text-muted: hsl(215, 20%, 65%);
+  --border-color: hsl(217, 33%, 20%);
+  
+  --glass-bg: hsla(222, 47%, 11%, 0.8);
+  --glass-border: hsla(217, 33%, 25%, 0.3);
 }
+
 
 /* 3. GLOBAL RESET & BASE STYLES */
 * {
@@ -48,53 +65,95 @@ body {
   background-color: var(--bg-color);
   color: var(--text-main);
   /* Smooth transition for theme switching background and text colors */
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: var(--transition-smooth);
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 .app-container {
-  max-width: 1200px;         /* Prevents the app from becoming too wide on large screens */
-  margin: 0 auto;            /* Centers the app horizontally */
-  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
 }
+
 
 /**
  * 4. COMPONENT STYLES: HEADER
- * Uses Flexbox for horizontal alignment of the brand and controls.
+ * Applying glassmorphism to the header for a modern, 'floating' effect.
  */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  margin: -3rem -1.5rem 2rem -1.5rem; /* Negate app padding to span full width */
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;           /* Allows content to stack on small devices */
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  transition: var(--transition-smooth);
 }
 
 .header-title {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  background: linear-gradient(135deg, var(--primary) 0%, hsl(260, 80%, 60%) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .controls {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
-/* Search bar styling with an 'Apple-style' pill shape */
+/* Search bar styling with an 'Apple-style' glass effect */
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: var(--card-bg);
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
-  border-radius: 9999px;
-  padding: 0.5rem 1rem;
-  width: 250px;
+  border-radius: 99px;
+  padding: 0.6rem 1.25rem;
+  width: 280px;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
+}
+
+.search-bar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-glow);
+  width: 320px; /* Expands on focus */
 }
 
 .search-bar input {
@@ -103,8 +162,9 @@ body {
   outline: none;
   color: var(--text-main);
   width: 100%;
-  margin-left: 0.5rem;
+  margin-left: 0.75rem;
   font-family: inherit;
+  font-weight: 500;
 }
 
 /* Rounded buttons for theme and bookmark toggles */
@@ -112,43 +172,50 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 0.5rem;
+  padding: 0.6rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
 }
 
 .icon-btn:hover {
-  background: var(--border-color);
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.icon-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
 }
 
 .btn {
   background-color: var(--primary);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: background-color 0.2s;
+  transition: var(--transition-smooth);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 14px 0 var(--primary-glow);
 }
 
 .btn:hover {
-  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 var(--primary-glow);
 }
 
-.btn-outline {
-  background-color: transparent;
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-}
 
 /**
  * 5. COMPONENT STYLES: TABS & FILTERS
@@ -232,11 +299,11 @@ body {
  * Deep shadows and subtle hover effects for a premium 'card' look.
  */
 .article-card {
-  background-color: var(--card-bg);
-  border-radius: 1rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-smooth);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -244,15 +311,35 @@ body {
 }
 
 .article-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-premium);
+  border-color: var(--primary-glow);
+}
+
+.article-image-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
 }
 
 .article-image {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
   background-color: var(--border-color);
+}
+
+.article-card:hover .article-image {
+  transform: scale(1.05);
+}
+
+/* Subtle gradient overlay for the image */
+.article-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.4) 100%);
 }
 
 .article-content {
@@ -266,31 +353,124 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--text-muted);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .article-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
   color: var(--text-main);
-  line-height: 1.4;
+  line-height: 1.3;
   cursor: pointer;
+  transition: var(--transition-smooth);
 }
 
-/* Strikethrough style for articles marked as read */
+.article-title:hover {
+  color: var(--primary);
+}
+
 .article-title.read {
-  text-decoration: line-through;
-  color: var(--text-muted);
+  opacity: 0.6;
+  text-decoration-color: var(--primary);
 }
 
 .article-desc {
   color: var(--text-muted);
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-  line-height: 1.5;
+  font-size: 0.925rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+
+.article-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Revamped Action Buttons: More icon-centric and modern */
+.action-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 0.85rem;
+  transition: var(--transition-smooth);
+}
+
+.action-btn:hover {
+  background-color: var(--card-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.action-btn.active {
+  background: var(--primary-glow);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.action-btn.read-active {
+  background: hsla(142, 71%, 45%, 0.1);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+/* Premium Expand Button */
+.expand-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.expand-btn:hover {
+  background: var(--primary-glow);
+}
+
+.expand-btn .chevron {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.expand-btn.active .chevron {
+  transform: rotate(180deg);
+}
+
+.read-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-style: italic;
+  opacity: 0.8;
 }
 
 /**
@@ -300,63 +480,90 @@ body {
 /* Pulse animation for the BREAKING badge */
 .badge-breaking {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background-color: var(--danger);
+  top: 1.25rem;
+  left: 1.25rem;
+  background: var(--danger);
   color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+  padding: 0.4rem 1rem;
+  border-radius: 99px;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.4rem;
   z-index: 10;
+  box-shadow: 0 4px 12px hsla(0, 84%, 60%, 0.4);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% { transform: scale(1); box-shadow: 0 4px 12px hsla(0, 84%, 60%, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 8px 20px hsla(0, 84%, 60%, 0.6); }
+  100% { transform: scale(1); box-shadow: 0 4px 12px hsla(0, 84%, 60%, 0.4); }
 }
 
 /* Shimmer/Skeleton loading effect */
 .skeleton {
-  animation: skeleton-loading 1s linear infinite alternate;
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 25%,
+    var(--card-bg) 50%,
+    var(--border-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
 
-@keyframes skeleton-loading {
-  0% { background-color: var(--border-color); }
-  100% { background-color: var(--card-bg); }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .skeleton-card {
-  height: 400px;
-  border-radius: 1rem;
+  height: 440px;
+  border-radius: var(--radius-lg);
 }
 
-/* Standard Spinner animation for manual refresh */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem 0;
+}
+
+/* Premium Spinner */
 .spinner {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border: 4px solid var(--border-color);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
+.error-message {
+  background: hsla(0, 84%, 60%, 0.1);
+  color: var(--danger);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  margin: 3rem 0;
+  border: 1px solid var(--danger);
+  font-weight: 600;
+}
+
 /**
- * 9. RESPONSIVE DESIGN (MEDIA QUERIES)
+ * 9. RESPONSIVE DESIGN
  */
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    align-items: flex-start;
+    margin: -3rem -1.5rem 2rem -1.5rem;
+    padding: 1.25rem;
+    gap: 1rem;
   }
   
   .controls {
@@ -369,5 +576,103 @@ body {
     order: 3;
     margin-top: 1rem;
   }
+
+  .search-bar:focus-within {
+    width: 100%;
+  }
+
+  .app-container {
+    padding: 3rem 1rem;
+  }
 }
+
+.empty-state {
+  text-align: center;
+  padding: 6rem 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--border-color);
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 4rem auto;
+  box-shadow: var(--shadow-md);
+}
+
+.empty-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  background: var(--bg-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Styled Select Wrapper for professional look */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.select-wrapper::after {
+  content: '▼';
+  font-size: 0.6rem;
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+  transition: var(--transition-smooth);
+}
+
+.select-wrapper:hover::after {
+  color: var(--primary);
+}
+
+.sort-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0.6rem 2.5rem 0.6rem 1.25rem;
+  border-radius: 99px; /* Maximum roundness */
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
+  outline: none;
+  min-width: 140px;
+}
+
+.sort-select:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-glow);
+  transform: translateY(-1px);
+}
+
+.sort-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+/* Dark mode specific adjustments for dropdown options if needed */
+.dark-mode .sort-select option {
+  background-color: var(--card-bg);
+  color: var(--text-main);
+}
+
+
+
 

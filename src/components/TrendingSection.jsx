@@ -14,28 +14,26 @@ const TrendingSection = ({ trendingArticles, loading, error, category, searchTer
 
   return (
     <div className="trending-section">
-      <h2 className="section-title">🔥 Trending News</h2>
+      <h2 className="section-title">✨ Trending Now</h2>
       <div className="trending-grid">
         {/* Iterates through the top 3 latest articles passed as a prop from App.jsx */}
         {trendingArticles.map((article, idx) => (
           <div 
-            key={`trending-${idx}`} // Composite key using index for trending list
+            key={`trending-${idx}`} 
             className="article-card" 
-            style={{ cursor: 'pointer' }} 
-            // Syntax: External link handling via window.open()
             onClick={() => window.open(article.url, '_blank')}
           >
-            {/* 1. VISUAL: Shorter image for the horizontal grid layout */}
-            {article.urlToImage && (
-              <img src={article.urlToImage} alt="" className="article-image" style={{ height: '120px' }} />
-            )}
-            <div className="article-content" style={{ padding: '1rem' }}>
-              {/* 2. SOURCE BADGE */}
-              <div className="article-source" style={{ display: 'inline-block', marginBottom: '0.5rem', fontSize: '0.7rem' }}>
-                {article.source.name}
+            <div className="article-image-container" style={{ height: '140px' }}>
+              {article.urlToImage && (
+                <img src={article.urlToImage} alt="" className="article-image" />
+              )}
+              <div className="article-image-overlay" />
+            </div>
+            <div className="article-content" style={{ padding: '1.25rem' }}>
+              <div className="article-meta">
+                <span>{article.source.name}</span>
               </div>
-              {/* 3. TRENDING TITLE */}
-              <h3 className="article-title" style={{ fontSize: '1rem', marginBottom: 0 }}>
+              <h3 className="article-title" style={{ fontSize: '1rem', fontWeight: '800' }}>
                 {article.title}
               </h3>
             </div>
@@ -43,6 +41,7 @@ const TrendingSection = ({ trendingArticles, loading, error, category, searchTer
         ))}
       </div>
     </div>
+
   );
 };
 

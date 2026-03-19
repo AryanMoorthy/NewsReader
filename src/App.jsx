@@ -309,10 +309,11 @@ function App() {
       {/* 4. Global Error Notifications: Rendered conditionally using logical AND (&&) */}
       {error && (
         <div className="error-message">
-          <AlertCircle size={24} style={{ display: 'inline', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+          <AlertCircle size={24} style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
           {error}
         </div>
       )}
+
 
       {/* 5. Trending Section: Displays the 'billboard' of latest breaking news */}
       <TrendingSection 

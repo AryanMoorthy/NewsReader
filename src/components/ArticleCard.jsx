@@ -40,90 +40,95 @@ const ArticleCard = ({
 
   return (
     <div className={`article-card ${isRead ? 'read' : ''}`}>
-      {/* 1. BADGE: Visual indicator for urgent/breaking news (probabilistic flag from App.jsx) */}
-      {article.isBreaking && (
-        <div className="badge-breaking">🔴 BREAKING</div>
-      )}
-      
-      {/* 2. IMAGE: Displays article thumbnail with error fallback logic */}
-      {article.urlToImage && (
-        <img 
-          src={article.urlToImage} 
-          alt={article.title} 
-          className="article-image"
-          // Syntax: Inline error handler to hide broken images
-          onError={(e) => { e.target.style.display = 'none'; }}
-        />
-      )}
+      {/* 1. IMAGE: Premium container with overlay and better error handling */}
+      <div className="article-image-container">
+        {article.isBreaking && (
+          <div className="badge-breaking">🔥 BREAKING</div>
+        )}
+        
+        {article.urlToImage ? (
+          <>
+            <img 
+              src={article.urlToImage} 
+              alt={article.title} 
+              className="article-image"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+            <div className="article-image-overlay" />
+          </>
+        ) : (
+          <div className="article-image-placeholder" />
+        )}
+      </div>
       
       <div className="article-content">
-        {/* 3. METADATA: Source name and relative publication time */}
+        {/* 2. METADATA: Refined source and time */}
         <div className="article-meta">
-          <span className="article-source">{article.source?.name || 'Unknown Source'}</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Clock size={12} />
-            {/* Logic: date-fns formatting with suffix (e.g., 'ago') */}
-            {article.publishedAt ? formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true }) : 'Unknown'}
+          <span className="article-source">{article.source?.name || 'News'}</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Clock size={14} />
+            {article.publishedAt ? formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true }) : 'Just now'}
           </span>
         </div>
         
-        {/* 4. TITLE: Clickable link that opens in a new tab */}
+        {/* 3. TITLE: Direct link */}
         <h3 className={`article-title ${isRead ? 'read' : ''}`}>
           <a href={article.url} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
             {article.title}
           </a>
         </h3>
         
-        {/* 5. DESCRIPTION: Truncated by default, toggleable to full view */}
+        {/* 4. DESCRIPTION: Revamped 'Expand' behavior */}
         {article.description && (
-          <div style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>
-            {isExpanded ? (
-              <p className="article-desc" style={{ marginBottom: '0.5rem' }}>{article.description}</p>
-            ) : (
-              <p className="article-desc" style={{ marginBottom: '0.5rem' }}>
-                {/* Logic: Limit string length to 100 characters for grid consistency */}
-                {article.description.length > 100 
-                  ? `${article.description.slice(0, 100)}...` 
-                  : article.description}
-              </p>
-            )}
-            <button 
-              className="action-btn" 
-              style={{ color: 'var(--primary)', padding: 0 }}
-              onClick={() => toggleExpand(title)}
-            >
-              {/* Ternary: Switch labels based on expansion state */}
-              {isExpanded ? (
-                <><ChevronUp size={16} /> Show Less</>
-              ) : (
-                <><ChevronDown size={16} /> Expand ({calculateReadingTime(article.description)} min read)</>
+          <div className="article-body">
+            <p className="article-desc">
+              {isExpanded ? article.description : (
+                article.description.length > 90 
+                  ? `${article.description.slice(0, 90)}...` 
+                  : article.description
               )}
-            </button>
+            </p>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <button 
+                className={`expand-btn ${isExpanded ? 'active' : ''}`}
+                onClick={() => toggleExpand(title)}
+              >
+                {isExpanded ? 'Show Less' : `Read More`}
+                <ChevronDown className="chevron" size={16} />
+              </button>
+              <span className="read-time">{calculateReadingTime(article.description)} min read</span>
+            </div>
           </div>
         )}
         
-        {/* 6. USER INTERACTIONS: Mark as read and Save (Bookmark) */}
+        {/* 5. USER INTERACTIONS: Revamped Action Group */}
         <div className="article-footer">
-          <button 
-            className={`action-btn ${isRead ? 'read-active' : ''}`}
-            onClick={() => toggleReadStatus(title)}
-            title={isRead ? "Mark as UNREAD" : "Mark as READ"}
-          >
-            {isRead ? <CheckCircle2 size={18} /> : <Circle size={18} />}
-            {isRead ? 'Read' : 'Mark as read'}
-          </button>
+          <div className="action-group">
+            <button 
+              className={`action-btn ${isRead ? 'read-active' : ''}`}
+              onClick={() => toggleReadStatus(title)}
+              title={isRead ? "Mark as unread" : "Mark as read"}
+            >
+              {isRead ? <CheckCircle2 size={20} /> : <Circle size={20} />}
+            </button>
+            
+            <button 
+              className={`action-btn ${isBookmarked ? 'active' : ''}`}
+              onClick={() => toggleBookmark(title)}
+              title={isBookmarked ? "Remove bookmark" : "Save article"}
+            >
+              {isBookmarked ? <BookmarkCheck size={20} /> : <Bookmark size={20} />}
+            </button>
+          </div>
           
-          <button 
-            className={`action-btn ${isBookmarked ? 'active' : ''}`}
-            onClick={() => toggleBookmark(title)}
-            title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
-          >
-            {isBookmarked ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
-            Save
-          </button>
+          <a href={article.url} target="_blank" rel="noopener noreferrer" className="btn" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+            Full Article
+          </a>
         </div>
       </div>
     </div>
+
   );
 };
 

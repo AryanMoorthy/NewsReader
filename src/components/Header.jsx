@@ -27,66 +27,54 @@ const Header = ({
   return (
     <header className="header">
       {/* 1. BRAND IDENTITY Section */}
-      <h1 className="header-title">
-        <span style={{ fontSize: '2.5rem' }}>📰</span> NewsReader
-      </h1>
+      <div className="header-title">
+        <span style={{ fontSize: '2rem' }}>🌐</span> NewsFeed
+      </div>
       
       <div className="controls">
         {/* 2. SEARCH BAR: Updates App.jsx state via onChange event */}
         <div className="search-bar">
-          <Search size={18} color="var(--text-muted)" />
+          <Search size={18} />
           <input 
             type="text" 
-            placeholder="Search headlines..." 
+            placeholder="Search fresh news..." 
             value={searchTerm}
-            // Syntax: Captures every keystroke to filter articles in real-time
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         
         {/* 3. BOOKMARK TOGGLE: Switches between the main feed and saved articles */}
         <button 
-          // Syntax: Dynamic class assignment based on the boolean state
-          className={`btn ${showBookmarksOnly ? '' : 'btn-outline'}`}
+          className={`icon-btn ${showBookmarksOnly ? 'active' : ''}`}
           onClick={() => setShowBookmarksOnly(!showBookmarksOnly)}
-          title="View Bookmarks"
+          title={showBookmarksOnly ? "Show All News" : "Show Bookmarks"}
         >
-          {/* Ternary Operator: Renders different icons/text based on the state */}
           {showBookmarksOnly ? <BookmarkCheck size={20} /> : <Bookmark size={20} />}
-          {showBookmarksOnly ? 'Bookmarked' : 'Bookmarks'}
         </button>
         
         {/* 4. THEME TOGGLE: Switches CSS variables by updating the body class in App.jsx */}
-        <button className="icon-btn" onClick={toggleTheme} title="Toggle Dark Mode">
+        <button className="icon-btn" onClick={toggleTheme} title="Toggle Theme">
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        {/* 5. COUNTRY SELECTOR: Triggers a new API fetch in App.jsx when changed */}
-        <select 
-          className="country-select"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-          title="Change Country"
-          // Inline styles for quick visual adjustments (overrides CSS class if needed)
-          style={{
-            padding: '0.4rem 0.6rem',
-            borderRadius: '8px',
-            border: '1px solid var(--border-color)',
-            backgroundColor: 'var(--card-bg)',
-            color: 'var(--text-main)',
-            fontSize: '0.85rem',
-            cursor: 'pointer',
-            outline: 'none',
-            marginLeft: '0.5rem'
-          }}
-        >
-          {/* Mapping: Iterates through the COUNTRIES array to generate <option> tags */}
-          {COUNTRIES.map(c => (
-            <option key={c.code} value={c.code}>{c.name}</option>
-          ))}
-        </select>
+        {/* 5. COUNTRY SELECTOR: Styled wrapper for the native select */}
+        <div className="select-wrapper">
+          <select 
+            className="sort-select"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            title="Change Country"
+          >
+
+            {/* Mapping: Iterates through the COUNTRIES array to generate <option> tags */}
+            {COUNTRIES.map(c => (
+              <option key={c.code} value={c.code}>{c.name}</option>
+            ))}
+          </select>
+        </div>
       </div>
     </header>
+
   );
 };
 

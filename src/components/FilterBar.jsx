@@ -24,11 +24,11 @@ const FilterBar = ({
       <div className="tabs">
         {CATEGORIES.map(cat => (
           <div 
-            key={cat} // Syntax: React's 'key' prop is required when rendering lists for efficient updates
-            className={`tab ${category === cat ? 'active' : ''}`} // Dynamic class for styling the selected tab
+            key={cat} 
+            className={`tab ${category === cat ? 'active' : ''}`}
             onClick={() => {
-              setCategory(cat); // Switch API category
-              setShowBookmarksOnly(false); // UX: Automatically exit bookmark mode to show the new category
+              setCategory(cat);
+              setShowBookmarksOnly(false);
             }}
           >
             {cat}
@@ -38,12 +38,12 @@ const FilterBar = ({
       
       {/* 2. STATS DASHBOARD: Quick overview of the user's reading progress */}
       <div className="stats">
-        {/* Simple statistics display using interpolated variables {} */}
         <div className="stat-item">Total: <span>{totalArticles}</span></div>
-        <div className="stat-item">Read: <span style={{color: 'var(--success)'}}>{readCount}</span></div>
+        <div className="stat-item">Read: <span>{readCount}</span></div>
         <div className="stat-item">Unread: <span>{unreadCount}</span></div>
       </div>
     </div>
+
   );
 };
 
