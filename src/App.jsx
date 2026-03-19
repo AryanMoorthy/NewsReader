@@ -196,15 +196,13 @@ function App() {
 
   /**
    * getFilteredArticles: Processes the raw articles list based on user interactions.
-   * Uses .filter() and .sort() array methods.
+   * If showBookmarksOnly is true, it ignores the current category and search, 
+   * showing all saved articles globally.
    */
   const getFilteredArticles = () => {
-    let filtered = [...articles]; // Create a shallow copy to avoid mutating the original state
-
-    // Filter by Bookmarks: Only keep articles whose titles are in the bookmarkedArticles array
-    if (showBookmarksOnly) {
-      filtered = filtered.filter(a => bookmarkedArticles.includes(a.title));
-    }
+    // If showBookmarksOnly is true, we ignore the current API 'articles' 
+    // and instead use our local persistent 'bookmarkedArticles'.
+    let filtered = showBookmarksOnly ? [...bookmarkedArticles] : [...articles];
 
     // Filter by Search Term (Case-insensitive)
     if (searchTerm) {
@@ -226,6 +224,7 @@ function App() {
     return filtered;
   };
 
+
   // Execute processing logic
   const filteredArticles = getFilteredArticles();
   
@@ -235,9 +234,13 @@ function App() {
     .slice(0, 3);
 
   // Derived Values (computed during render)
-  const totalArticles = articles.length;
-  const readCount = articles.filter(a => readArticles.includes(a.title)).length;
+  // These stats are used by the FilterBar to show reading progress
+  const displayArticles = showBookmarksOnly ? bookmarkedArticles : articles;
+  const totalArticles = displayArticles.length;
+  const readCount = displayArticles.filter(a => readArticles.includes(a.title)).length;
   const unreadCount = totalArticles - readCount;
+
+
 
   /**
    * --- EVENT HANDLERS ---
@@ -256,12 +259,24 @@ function App() {
     );
   };
 
-  // Toggle bookmark status (similar logic to read status)
-  const toggleBookmark = (title) => {
-    setBookmarkedArticles(prev => 
-      prev.includes(title) ? prev.filter(t => t !== title) : [...prev, title]
-    );
+  /**
+   * toggleBookmark: Adds or removes an entire article object from the bookmarks.
+   * Checks for existing entries by matching the title.
+   */
+  const toggleBookmark = (article) => {
+    setBookmarkedArticles(prev => {
+      const exists = prev.find(a => a.title === article.title);
+      if (exists) {
+        // Remove if it already exists (unbookmark)
+        return prev.filter(a => a.title !== article.title);
+      } else {
+        // Add full object if new (bookmark)
+        return [...prev, article];
+      }
+    });
   };
+   /* toggleBookmark: (Old version that used strings) */
+
 
   // Toggle 'expanded' view for article descriptions
   const toggleExpand = (title) => {

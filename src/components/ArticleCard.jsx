@@ -25,7 +25,10 @@ const ArticleCard = ({
   // DERIVED STATE: Check status of current article for visual feedback
   const title = article.title;
   const isRead = readArticles.includes(title);
-  const isBookmarked = bookmarkedArticles.includes(title);
+  const isBookmarked = typeof bookmarkedArticles[0] === 'string' 
+    ? bookmarkedArticles.includes(title) 
+    : bookmarkedArticles.some(a => a.title === title);
+
   const isExpanded = expandedArticles.includes(title);
   
   /**
@@ -115,9 +118,10 @@ const ArticleCard = ({
             
             <button 
               className={`action-btn ${isBookmarked ? 'active' : ''}`}
-              onClick={() => toggleBookmark(title)}
+              onClick={() => toggleBookmark(article)}
               title={isBookmarked ? "Remove bookmark" : "Save article"}
             >
+
               {isBookmarked ? <BookmarkCheck size={20} /> : <Bookmark size={20} />}
             </button>
           </div>
