@@ -1,17 +1,23 @@
-import { AlertCircle, RefreshCw } from 'lucide-react';
-import ArticleCard from './ArticleCard';
+import { AlertCircle, RefreshCw } from 'lucide-react'; // Icons for error and refresh actions
+import ArticleCard from './ArticleCard'; // The individual unit for each news story
 
 /**
- * ActionBar Component
- * Small utility component for the refresh button and sort selector.
+ * ActionBar Component: A helper component for manual news refresh and sorting.
+ * 
+ * @param {function} fetchNews - Function to trigger a fresh API request.
+ * @param {boolean} loading - Current loading state to disable the button.
+ * @param {string} sortBy - Current sort preference ('latest'/'oldest').
+ * @param {function} setSortBy - Function to update sorting state.
  */
 export const ActionBar = ({ fetchNews, loading, sortBy, setSortBy }) => {
   return (
     <div className="filters-row" style={{ marginTop: '-1rem' }}>
+      {/* REFRESH BUTTON: Calls fetchNews(true) to bypass cache */}
       <button className="btn btn-outline" onClick={() => fetchNews(true)} disabled={loading}>
         <RefreshCw size={16} className={loading ? 'skeleton' : ''} /> Refresh News
       </button>
       
+      {/* SORT SELECTOR: Triggers a re-render in App.jsx via getFilteredArticles */}
       <select 
         className="sort-select"
         value={sortBy}
@@ -25,11 +31,8 @@ export const ActionBar = ({ fetchNews, loading, sortBy, setSortBy }) => {
 };
 
 /**
- * NewsFeed Component
- * The main container for articles. Handles:
- * - Loading states (skeleton cards)
- * - Empty states (no articles found)
- * - Rendering the grid of ArticleCards
+ * NewsFeed Component: The main architectural grid for displaying news articles.
+ * Handles three distinct UI states: Loading, Empty, and Content.
  */
 const NewsFeed = ({ 
   loading, 
@@ -45,12 +48,12 @@ const NewsFeed = ({
 }) => {
   return (
     <div>
-      {/* Dynamic Section Title */}
+      {/* 1. DYNAMIC SECTION TITLE: Changes based on the active view (Category vs Bookmarks) */}
       <h2 className="section-title">
         {showBookmarksOnly ? 'Your Bookmarks' : `${category} Headlines`}
       </h2>
       
-      {/* Loading Skeleton State */}
+      {/* 2. LOADING STATE: Renders 'Skeleton' cards using a temporary array [1..6] */}
       {loading ? (
         <div className="news-grid">
           {[1, 2, 3, 4, 5, 6].map(i => (
@@ -58,19 +61,19 @@ const NewsFeed = ({
           ))}
         </div>
       ) : filteredArticles.length === 0 ? (
-        /* Empty State */
+        /* 3. EMPTY STATE: Shown when no articles match the search or bookmarks are empty */
         <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-muted)' }}>
           <AlertCircle size={48} style={{ margin: '0 auto 1rem', opacity: 0.5 }} />
           <h3>No articles found</h3>
           <p>Try adjusting your search or filters.</p>
         </div>
       ) : (
-        /* Actual Content Grid */
+        /* 4. CONTENT STATE: Maps over the filteredArticles array to render individual cards */
         <div className="news-grid">
           {filteredArticles.map((article) => (
             <ArticleCard 
-              key={article.id}
-              article={article}
+              key={article.id} // Essential for React to track item moves/changes
+              article={article} // Prop Drilling: Passing state and handlers down to the child component
               readArticles={readArticles}
               toggleReadStatus={toggleReadStatus}
               bookmarkedArticles={bookmarkedArticles}
@@ -86,3 +89,4 @@ const NewsFeed = ({
 };
 
 export default NewsFeed;
+

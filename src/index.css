@@ -1,55 +1,73 @@
+/* 
+ * Google Fonts Import: Inter is a clean, modern sans-serif typeface 
+ * that works exceptionally well for UI and headline text.
+ */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/**
+ * 1. DESIGN SYSTEM (CSS VARIABLES)
+ * Defining tokens for colors and themes allows for easy global updates 
+ * and seamless theme switching.
+ */
 :root {
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --bg-color: #f3f4f6;
-  --card-bg: #ffffff;
-  --text-main: #111827;
-  --text-muted: #6b7280;
-  --border-color: #e5e7eb;
-  --danger: #ef4444;
-  --success: #10b981;
+  --primary: #3b82f6;          /* Bright Blue for buttons and highlights */
+  --primary-hover: #2563eb;    /* Slightly darker blue for hover states */
+  --bg-color: #f3f4f6;         /* Light grey background for the app */
+  --card-bg: #ffffff;          /* Pure white for article cards */
+  --text-main: #111827;        /* Almost black for high readability */
+  --text-muted: #6b7280;       /* Medium grey for secondary info */
+  --border-color: #e5e7eb;     /* Soft grey for dividers and borders */
+  --danger: #ef4444;           /* Red for alert/breaking news */
+  --success: #10b981;          /* Green for 'Read' status indicator */
 }
 
+/**
+ * 2. DARK MODE OVERRIDES
+ * When the .dark-mode class is added to the <body>, these variables 
+ * override the default light theme tokens.
+ */
 .dark-mode {
   --primary: #60a5fa;
   --primary-hover: #3b82f6;
-  --bg-color: #111827;
-  --card-bg: #1f2937;
-  --text-main: #f9fafb;
+  --bg-color: #111827;         /* Deep dark navy background */
+  --card-bg: #1f2937;          /* Slightly lighter navy for cards */
+  --text-main: #f9fafb;        /* Off-white for readability in the dark */
   --text-muted: #9ca3af;
-  --border-color: #374151;
+  --border-color: #374151;     /* Subdued border color for dark mode */
 }
 
+/* 3. GLOBAL RESET & BASE STYLES */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box;     /* Ensures padding/borders don't affect element dimensions */
 }
 
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-main);
+  /* Smooth transition for theme switching background and text colors */
   transition: background-color 0.3s ease, color 0.3s ease;
   line-height: 1.5;
 }
 
 .app-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1200px;         /* Prevents the app from becoming too wide on large screens */
+  margin: 0 auto;            /* Centers the app horizontally */
   padding: 2rem 1rem;
 }
 
-/* Header & Controls */
-
+/**
+ * 4. COMPONENT STYLES: HEADER
+ * Uses Flexbox for horizontal alignment of the brand and controls.
+ */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-wrap: wrap;           /* Allows content to stack on small devices */
   gap: 1rem;
 }
 
@@ -68,6 +86,7 @@ body {
   flex-wrap: wrap;
 }
 
+/* Search bar styling with an 'Apple-style' pill shape */
 .search-bar {
   display: flex;
   align-items: center;
@@ -88,6 +107,7 @@ body {
   font-family: inherit;
 }
 
+/* Rounded buttons for theme and bookmark toggles */
 .icon-btn {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -130,23 +150,21 @@ body {
   border: 1px solid var(--border-color);
 }
 
-.btn-outline:hover {
-  background-color: var(--card-bg);
-}
-
-/* Tabs & Filters */
-
+/**
+ * 5. COMPONENT STYLES: TABS & FILTERS
+ * Horizontal scrolling layout for categories on mobile.
+ */
 .tabs {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  overflow-x: auto;
+  overflow-x: auto;          /* Enable horizontal scrolling */
   padding-bottom: 0.5rem;
-  scrollbar-width: none;
+  scrollbar-width: none;     /* Hide scrollbar for cleaner UI in Firefox */
 }
 
 .tabs::-webkit-scrollbar {
-  display: none;
+  display: none;             /* Hide scrollbar for Chrome/Safari/Edge */
 }
 
 .tab {
@@ -193,32 +211,10 @@ body {
   color: var(--text-main);
 }
 
-.sort-select {
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
-  background-color: var(--card-bg);
-  color: var(--text-main);
-  outline: none;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-/* Trending Section */
-.trending-section {
-  margin-bottom: 3rem;
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Grid Layouts */
+/**
+ * 6. GRID LAYOUTS & SKELETONS
+ * Responsive grid using repeat(auto-fill, minmax) for effortless resizing.
+ */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -231,12 +227,15 @@ body {
   gap: 1.5rem;
 }
 
-/* Article Card */
+/**
+ * 7. ARTICLE CARDS
+ * Deep shadows and subtle hover effects for a premium 'card' look.
+ */
 .article-card {
   background-color: var(--card-bg);
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
   display: flex;
   flex-direction: column;
@@ -246,7 +245,7 @@ body {
 
 .article-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .article-image {
@@ -272,14 +271,6 @@ body {
   margin-bottom: 0.75rem;
 }
 
-.article-source {
-  font-weight: 600;
-  background-color: rgba(59, 130, 246, 0.1);
-  color: var(--primary);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-}
-
 .article-title {
   font-size: 1.125rem;
   font-weight: 700;
@@ -289,6 +280,7 @@ body {
   cursor: pointer;
 }
 
+/* Strikethrough style for articles marked as read */
 .article-title.read {
   text-decoration: line-through;
   color: var(--text-muted);
@@ -301,16 +293,11 @@ body {
   line-height: 1.5;
 }
 
-.article-footer {
-  margin-top: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
-}
+/**
+ * 8. ANIMATIONS & LOADERS
+ */
 
-/* Badges */
+/* Pulse animation for the BREAKING badge */
 .badge-breaking {
   position: absolute;
   top: 1rem;
@@ -324,7 +311,6 @@ body {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   z-index: 10;
   animation: pulse 2s infinite;
 }
@@ -335,34 +321,7 @@ body {
   100% { transform: scale(1); }
 }
 
-.action-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  transition: color 0.2s;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-}
-
-.action-btn:hover {
-  background-color: var(--bg-color);
-  color: var(--text-main);
-}
-
-.action-btn.active {
-  color: var(--primary);
-}
-
-.action-btn.read-active {
-  color: var(--success);
-}
-
-/* Loading Skeleton */
+/* Shimmer/Skeleton loading effect */
 .skeleton {
   animation: skeleton-loading 1s linear infinite alternate;
 }
@@ -377,13 +336,7 @@ body {
   border-radius: 1rem;
 }
 
-.loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem 0;
-}
-
+/* Standard Spinner animation for manual refresh */
 .spinner {
   width: 40px;
   height: 40px;
@@ -397,17 +350,9 @@ body {
   to { transform: rotate(360deg); }
 }
 
-.error-message {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  text-align: center;
-  margin: 2rem 0;
-  border: 1px solid var(--danger);
-}
-
-/* Responsive */
+/**
+ * 9. RESPONSIVE DESIGN (MEDIA QUERIES)
+ */
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -425,3 +370,4 @@ body {
     margin-top: 1rem;
   }
 }
+

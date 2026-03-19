@@ -1,13 +1,25 @@
+<!-- Standard declaration for HTML5 documents -->
 <!doctype html>
+<!-- The root element of an HTML page with the language set to English -->
 <html lang="en">
   <head>
+    <!-- Metadata specifying the character encoding for the document -->
     <meta charset="UTF-8" />
+    <!-- Link to the website's favicon (the icon shown in the browser tab) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Viewport settings to ensure the website is responsive and looks good on all devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The title of the website displayed in the browser tab -->
     <title>news-headlines-reader</title>
   </head>
   <body>
+    <!-- The main container where the React application will be mounted -->
+    <!-- 'root' is the ID used by ReactDOM.createRoot in src/main.jsx -->
     <div id="root"></div>
+    
+    <!-- The entry point of the application. It loads the main JavaScript file as a module. -->
+    <!-- In Vite, we point directly to the .jsx file as it's processed during development. -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+

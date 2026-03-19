@@ -1,9 +1,14 @@
-import { CATEGORIES } from '../utils/constants';
+import { CATEGORIES } from '../utils/constants'; // List of news categories (e.g., Tech, Sports)
 
 /**
- * FilterBar Component
- * Displays the category tabs for navigation and provides basic 
- * stats about the articles (Total, Read, Unread).
+ * FilterBar Component: Displays category navigation tabs and basic article metrics.
+ * 
+ * @param {string} category - The currently selected news category.
+ * @param {function} setCategory - Function to update the category state.
+ * @param {function} setShowBookmarksOnly - Injected to reset bookmark view when user clicks a category.
+ * @param {number} totalArticles - Count of all articles in the current feed.
+ * @param {number} readCount - Count of articles marked as read by the user.
+ * @param {number} unreadCount - totalArticles minus readCount.
  */
 const FilterBar = ({ 
   category, 
@@ -15,16 +20,15 @@ const FilterBar = ({
 }) => {
   return (
     <div className="filters-row">
-      {/* Category Tabs */}
+      {/* 1. CATEGORY TABS: Renders a button for each category in the constants file */}
       <div className="tabs">
         {CATEGORIES.map(cat => (
           <div 
-            key={cat}
-            className={`tab ${category === cat ? 'active' : ''}`}
+            key={cat} // Syntax: React's 'key' prop is required when rendering lists for efficient updates
+            className={`tab ${category === cat ? 'active' : ''}`} // Dynamic class for styling the selected tab
             onClick={() => {
-              setCategory(cat);
-              // When changing category, reset bookmarks-only view
-              setShowBookmarksOnly(false);
+              setCategory(cat); // Switch API category
+              setShowBookmarksOnly(false); // UX: Automatically exit bookmark mode to show the new category
             }}
           >
             {cat}
@@ -32,8 +36,9 @@ const FilterBar = ({
         ))}
       </div>
       
-      {/* Article Statistics */}
+      {/* 2. STATS DASHBOARD: Quick overview of the user's reading progress */}
       <div className="stats">
+        {/* Simple statistics display using interpolated variables {} */}
         <div className="stat-item">Total: <span>{totalArticles}</span></div>
         <div className="stat-item">Read: <span style={{color: 'var(--success)'}}>{readCount}</span></div>
         <div className="stat-item">Unread: <span>{unreadCount}</span></div>
@@ -43,3 +48,4 @@ const FilterBar = ({
 };
 
 export default FilterBar;
+
